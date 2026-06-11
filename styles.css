@@ -69,6 +69,48 @@ body {
   margin-top: 10px;
 }
 
+.spawner-instruction {
+  display: flex;
+  flex: 1 1 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 8px 10px;
+  color: #c8ded7;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.instruction-spawners {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.instruction-spawner {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  background:
+    radial-gradient(circle, currentColor 0 18%, rgba(7, 30, 33, 0.78) 20% 54%, transparent 56%);
+  opacity: 0.62;
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.08);
+}
+
+.instruction-plant {
+  color: rgba(112, 225, 138, 0.96);
+}
+
+.instruction-herbivore {
+  color: rgba(240, 214, 142, 0.95);
+}
+
+.instruction-carnivore {
+  color: rgba(235, 118, 98, 0.96);
+}
+
 .economy-row {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -87,26 +129,6 @@ body {
   display: block;
   font-size: 0.88rem;
   color: #d8eee6;
-}
-
-.metric {
-  min-width: 92px;
-  padding: 8px 10px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.03);
-}
-
-.metric-wide {
-  min-width: 210px;
-}
-
-.metric-label {
-  display: block;
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--muted);
-  margin-bottom: 2px;
 }
 
 button,
@@ -238,12 +260,10 @@ button:hover,
     padding-right: 92px;
   }
 
-  .metric {
-    flex: 1 1 118px;
-  }
-
-  .metric-wide {
-    flex-basis: 100%;
+  .spawner-instruction {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    text-align: left;
   }
 
   #fullscreenButton {
