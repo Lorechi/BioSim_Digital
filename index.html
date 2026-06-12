@@ -11,30 +11,17 @@
     <button id="settingsButton" class="settings-button" type="button" aria-expanded="false" aria-controls="hudPanel">Settings</button>
     <section id="hudPanel" class="hud-panel">
       <div class="hud-row">
-        <div class="metric">
-          <span class="metric-label">Carnivores</span>
-          <strong id="carnivoreValue">0</strong>
-        </div>
-        <div class="metric">
-          <span class="metric-label">Herbivores</span>
-          <strong id="herbivoreValue">0</strong>
-        </div>
-        <div class="metric">
-          <span class="metric-label">Plants</span>
-          <strong id="plantValue">0</strong>
-        </div>
-        <div class="metric">
-          <span class="metric-label">Bodies</span>
-          <strong id="bodyValue">0</strong>
-        </div>
-        <div class="metric metric-wide">
-          <span class="metric-label">Spawners</span>
-          <strong id="spawnerStatusValue">Drag a spawner into the ecosystem window</strong>
+        <div class="spawner-instruction">
+          <span>Please drag any of</span>
+          <span class="instruction-spawners" aria-label="plant, herbivore, and carnivore spawners">
+            <span class="instruction-spawner instruction-plant" aria-hidden="true"></span>
+            <span class="instruction-spawner instruction-herbivore" aria-hidden="true"></span>
+            <span class="instruction-spawner instruction-carnivore" aria-hidden="true"></span>
+          </span>
+          <span>from the left side of your screen into the darker area.</span>
         </div>
       </div>
       <div class="controls-row">
-        <button id="pauseButton" type="button">Pause</button>
-        <button id="resetButton" type="button">Reset</button>
         <button id="fullscreenButton" type="button">Fullscreen</button>
         <label class="slider-group">
           <span>Speed</span>
@@ -44,10 +31,6 @@
         <label class="toggle">
           <input id="networkToggle" type="checkbox" checked>
           <span>Plant network</span>
-        </label>
-        <label class="toggle">
-          <input id="debugToggle" type="checkbox">
-          <span>Debug mode</span>
         </label>
         <label class="toggle">
           <input id="catModeToggle" type="checkbox">

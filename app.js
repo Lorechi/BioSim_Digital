@@ -1,24 +1,17 @@
 const canvas = document.getElementById("simCanvas");
 const ctx = canvas.getContext("2d");
 
-const plantValue = document.getElementById("plantValue");
-const bodyValue = document.getElementById("bodyValue");
-const herbivoreValue = document.getElementById("herbivoreValue");
-const carnivoreValue = document.getElementById("carnivoreValue");
-const spawnerStatusValue = document.getElementById("spawnerStatusValue");
 const speedInput = document.getElementById("speedInput");
 const speedValue = document.getElementById("speedValue");
-const pauseButton = document.getElementById("pauseButton");
-const resetButton = document.getElementById("resetButton");
 const fullscreenButton = document.getElementById("fullscreenButton");
 const settingsButton = document.getElementById("settingsButton");
 const networkToggle = document.getElementById("networkToggle");
-const debugToggle = document.getElementById("debugToggle");
 const catModeToggle = document.getElementById("catModeToggle");
 const arenaPanel = document.querySelector(".arena-panel");
 const WORLD = BIOSIM_CONFIG.world;
 const SPAWNER_DEFAULTS = BIOSIM_CONFIG.spawners;
 const SPAWNER_KINDS = ["herbivore", "carnivore", "plant"];
+const DEBUG_MODE_ENABLED = false;
 
 const state = {
   width: 0,
@@ -69,10 +62,6 @@ function chancePerSecond(rate, dt) {
 
 function lerp(a, b, t) {
   return a + (b - a) * t;
-}
-
-function setSpawnerStatus(message) {
-  spawnerStatusValue.textContent = message;
 }
 
 function updateSpawnerAnimations(dt) {
@@ -2275,10 +2264,6 @@ function stepSimulation(dt) {
 }
 
 function syncHud() {
-  plantValue.textContent = String(state.plants.length);
-  bodyValue.textContent = String(state.bodies.length);
-  herbivoreValue.textContent = String(state.herbivores.length);
-  carnivoreValue.textContent = String(state.carnivores.length);
   speedValue.textContent = `${state.speedMultiplier.toFixed(2)}x`;
 }
 
@@ -2514,7 +2499,7 @@ function renderMeter(x, y, width, ratio, fillStyle, strokeStyle) {
 }
 
 function renderDebugOverlay() {
-  if (!debugToggle.checked) {
+  if (!DEBUG_MODE_ENABLED) {
     return;
   }
 
@@ -2786,7 +2771,7 @@ function renderSpawner(kind, spawner) {
   ctx.arc(spawner.x, spawner.y, centerDotRadius, 0, Math.PI * 2);
   ctx.fill();
 
-  if (kind === "plant" && debugToggle.checked) {
+  if (kind === "plant" && DEBUG_MODE_ENABLED) {
     ctx.strokeStyle = "rgba(112, 225, 138, 0.42)";
     ctx.lineWidth = 1.4;
     ctx.setLineDash([6, 6]);
@@ -2796,7 +2781,7 @@ function renderSpawner(kind, spawner) {
     ctx.setLineDash([]);
   }
 
-  if (debugToggle.checked) {
+  if (DEBUG_MODE_ENABLED) {
     const labelBase = kind === "herbivore" ? "HERBIVORE" : kind === "carnivore" ? "CARNIVORE" : "PLANT";
     const label = spawner.blockedByThicket ? `${labelBase} OFF` : labelBase;
     ctx.fillStyle = "rgba(226, 242, 236, 0.9)";
@@ -2867,7 +2852,6 @@ function tick(timestamp) {
 function resetWorld() {
   resizeCanvas();
   spawnInitialWorld();
-  setSpawnerStatus("Drag a spawner into the ecosystem window");
   syncHud();
 }
 
@@ -2915,10 +2899,6 @@ function updateDraggedSpawner(point) {
   spawner.enabled = !spawner.blockedByThicket;
 }
 
-function formatSpawnerKind(kind) {
-  return kind === "plant" ? "plant" : kind === "herbivore" ? "herbivore" : "carnivore";
-}
-
 canvas.addEventListener("pointerdown", (event) => {
   if (event.button !== 0 || state.draggedSpawnerKind) {
     return;
@@ -2936,7 +2916,6 @@ canvas.addEventListener("pointerdown", (event) => {
   state.draggedPointerId = event.pointerId;
   canvas.setPointerCapture(event.pointerId);
   updateDraggedSpawner(point);
-  setSpawnerStatus(`Dragging ${formatSpawnerKind(kind)} spawner`);
 });
 
 canvas.addEventListener("pointermove", (event) => {
@@ -2960,7 +2939,6 @@ function releaseDraggedSpawner(event) {
   snapSpawnerToSeat(kind);
   state.draggedSpawnerKind = null;
   state.draggedPointerId = null;
-  setSpawnerStatus("Drag a spawner into the ecosystem window");
 }
 
 canvas.addEventListener("pointerup", releaseDraggedSpawner);
@@ -2969,15 +2947,6 @@ canvas.addEventListener("pointercancel", releaseDraggedSpawner);
 speedInput.addEventListener("input", () => {
   state.speedMultiplier = Number(speedInput.value);
   speedValue.textContent = `${state.speedMultiplier.toFixed(2)}x`;
-});
-
-pauseButton.addEventListener("click", () => {
-  state.paused = !state.paused;
-  pauseButton.textContent = state.paused ? "Resume" : "Pause";
-});
-
-resetButton.addEventListener("click", () => {
-  resetWorld();
 });
 
 fullscreenButton.addEventListener("click", async () => {
@@ -3009,5 +2978,4 @@ resizeCanvas();
 spawnInitialWorld();
 syncHud();
 syncFullscreenButton();
-setSpawnerStatus("Drag a spawner into the ecosystem window");
 requestAnimationFrame(tick);
